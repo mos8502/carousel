@@ -2,7 +2,6 @@ package hu.nemi.carousel;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -18,7 +17,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeListener {
     private ViewPager viewPager;
 
-    private CarouselAdapter carouselAdapter = new CarouselAdapter();
+    private CarouselViewPagerAdapter carouselViewPagerAdapter = new CarouselViewPagerAdapter();
 
     public CarouselView(Context context) {
         this(context, null, 0);
@@ -37,6 +36,7 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.CarouselView);
         int carouselItemSize = ta.getDimensionPixelSize(R.styleable.CarouselView_carouselItemSize, MATCH_PARENT);
         int carouselItemMargin = ta.getDimensionPixelSize(R.styleable.CarouselView_carouselItemMargin, 0);
+        ta.recycle();
         LayoutParams layoutParams = new LayoutParams(carouselItemSize, carouselItemSize);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         addView(viewPager, layoutParams);
@@ -66,23 +66,23 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
         return pagerSize / (float)size;
     }
 
-    public void setAdapter(PagerAdapter adapter) {
-        carouselAdapter.setAdapter(adapter);
+    public void setAdapter(CarouselAdapter adapter) {
+        carouselViewPagerAdapter.setAdapter(adapter);
         if(adapter != null) {
-            viewPager.setAdapter(carouselAdapter);
+            viewPager.setAdapter(carouselViewPagerAdapter);
         } else {
             viewPager.setAdapter(null);
         }
     }
 
     public void setCurrentItem(int item, boolean smoothScroll) {
-        if(carouselAdapter.getAdapter().getCount() <= 2) {
+        if(carouselViewPagerAdapter.getAdapter().getCount() <= 2) {
             viewPager.setCurrentItem(item, smoothScroll);
         } else {
             if (item == 0) {
                 item = 1;
-            } else if (item == carouselAdapter.getAdapter().getCount() - 1) {
-                item = carouselAdapter.getCount() - 2;
+            } else if (item == carouselViewPagerAdapter.getAdapter().getCount() - 1) {
+                item = carouselViewPagerAdapter.getCount() - 2;
             } else {
                 item += 1;
             }
@@ -94,9 +94,9 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
     private void setCurrentCarouselPosition(int position, boolean smoothScroll) {
 
         if(position <= 1) {
-            position += carouselAdapter.getAdapter().getCount();
-        } else if(position >= carouselAdapter.getCount() -2) {
-            position -= carouselAdapter.getAdapter().getCount();
+            position += carouselViewPagerAdapter.getAdapter().getCount();
+        } else if(position >= carouselViewPagerAdapter.getCount() -2) {
+            position -= carouselViewPagerAdapter.getAdapter().getCount();
         }
 
         int currentCarouselPosition = viewPager.getCurrentItem();
@@ -105,8 +105,8 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
         }
     }
 
-    public PagerAdapter getAdapter() {
-        return carouselAdapter.getAdapter();
+    public CarouselAdapter getAdapter() {
+        return carouselViewPagerAdapter.getAdapter();
     }
 
     @Override
@@ -122,7 +122,7 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
     @Override
     public void onPageScrollStateChanged(int state) {
         if(state == ViewPager.SCROLL_STATE_IDLE) {
-            if(carouselAdapter.getAdapter().getCount() > 2) {
+            if(carouselViewPagerAdapter.getAdapter().getCount() > 2) {
                 setCurrentCarouselPosition(viewPager.getCurrentItem(), false);
             }
         }

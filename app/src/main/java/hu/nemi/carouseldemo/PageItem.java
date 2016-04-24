@@ -1,4 +1,4 @@
-package hu.nemi.carousel;
+package hu.nemi.carouseldemo;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;

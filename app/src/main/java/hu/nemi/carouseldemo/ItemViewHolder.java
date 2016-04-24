@@ -1,4 +1,4 @@
-package hu.nemi.carousel;
+package hu.nemi.carouseldemo;
 
 import android.support.annotation.DrawableRes;
 import android.view.View;
@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import hu.nemi.carousel.R;
 
 /**
  * Created by nemi on 24/04/16.

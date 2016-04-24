@@ -1,20 +1,21 @@
-package hu.nemi.carousel;
+package hu.nemi.carouseldemo;
 
 import android.content.Context;
 import android.support.annotation.LayoutRes;
-import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-public class ItemAdapter extends PagerAdapter {
+import hu.nemi.carousel.CarouselAdapter;
+
+public class Adapter extends CarouselAdapter {
 
     private List<PageItem> items;
     private int carouselItemViewResource;
 
-    public ItemAdapter(@LayoutRes int carouselItemViewResource) {
+    public Adapter(@LayoutRes int carouselItemViewResource) {
         this.carouselItemViewResource = carouselItemViewResource;
     }
 
@@ -24,12 +25,11 @@ public class ItemAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        PageItem carouselItem = items.get(position);
+    public View onCreateView(ViewGroup container, int adapterPosition) {
+        PageItem carouselItem = items.get(adapterPosition);
         ItemViewHolder itemViewHolder = new ItemViewHolder(inflateItemView(container));
         bindCarouselItemToVIew(itemViewHolder, carouselItem);
-        container.addView(itemViewHolder.getItemView());
-        return itemViewHolder;
+        return itemViewHolder.getItemView();
     }
 
     private void bindCarouselItemToVIew(ItemViewHolder itemViewHolder, PageItem item) {
@@ -47,19 +47,7 @@ public class ItemAdapter extends PagerAdapter {
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        ItemViewHolder itemViewHolder = (ItemViewHolder) object;
-        container.removeView(itemViewHolder.getItemView());
-    }
-
-    @Override
     public int getCount() {
         return items == null ? 0 : items.size();
-    }
-
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        ItemViewHolder itemViewHolder = (ItemViewHolder) object;
-        return itemViewHolder.getItemView() == view;
     }
 }
