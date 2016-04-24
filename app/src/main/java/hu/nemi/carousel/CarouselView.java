@@ -94,9 +94,9 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
 
     private void setCurrentCarouselPosition(int position, boolean smoothScroll) {
 
-        if(position == 1) {
+        if(position <= 1) {
             position += carouselAdapter.getAdapter().getCount();
-        } else if(position == carouselAdapter.getCount() -2) {
+        } else if(position >= carouselAdapter.getCount() -2) {
             position -= carouselAdapter.getAdapter().getCount();
         }
 
