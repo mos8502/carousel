@@ -122,7 +122,9 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
     @Override
     public void onPageScrollStateChanged(int state) {
         if(state == ViewPager.SCROLL_STATE_IDLE) {
-            setCurrentCarouselPosition(viewPager.getCurrentItem(), false);
+            if(carouselAdapter.getAdapter().getCount() > 2) {
+                setCurrentCarouselPosition(viewPager.getCurrentItem(), false);
+            }
         }
     }
 }
