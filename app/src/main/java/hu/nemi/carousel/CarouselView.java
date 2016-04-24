@@ -2,7 +2,6 @@ package hu.nemi.carousel;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.PointF;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -18,8 +17,6 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
  */
 public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeListener {
     private ViewPager viewPager;
-    private PointF center = new PointF();
-    private PointF initialTouch = new PointF();
 
     private CarouselAdapter carouselAdapter = new CarouselAdapter();
 
@@ -48,23 +45,25 @@ public class CarouselView extends FrameLayout implements ViewPager.OnPageChangeL
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        center.set(w / 2.0f, h / 2.0f);
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN : {
-                initialTouch.set(event.getX(), event.getY());
-            }
-            default: {
-                event.offsetLocation(center.x - initialTouch.x, center.y - initialTouch.y);
-            }
-        }
+        float horizontalSizeRatio = getHorizontalSizeRatio();
+        float verticalSizeRatio = getVerticalSizeRatio();
+
+        event.setLocation(event.getX()*horizontalSizeRatio, event.getY()*verticalSizeRatio);
 
         return viewPager.onTouchEvent(event);
+    }
+
+    private float getHorizontalSizeRatio() {
+        return getRatio(getWidth(), viewPager.getWidth());
+    }
+
+    private float getVerticalSizeRatio() {
+        return getRatio(getHeight(), viewPager.getHeight());
+    }
+
+    private float getRatio(int size, int pagerSize) {
+        return pagerSize / (float)size;
     }
 
     public void setAdapter(PagerAdapter adapter) {
