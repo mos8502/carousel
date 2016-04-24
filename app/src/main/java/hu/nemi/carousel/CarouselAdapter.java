@@ -23,7 +23,7 @@ public class CarouselAdapter extends PagerAdapter  {
 
     public void setAdapter(PagerAdapter adapter) {
         if(this.adapter != null) {
-            unregisterDataSetObserver(adapterObserver);
+            this.adapter.unregisterDataSetObserver(adapterObserver);
         }
         this.adapter = adapter;
 
