@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Carousel</string>
+    <string name="carousel_title_format">Carousel Item %d</string>
+</resources>
